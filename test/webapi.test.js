@@ -10,7 +10,7 @@ import EIP712Utils from '../lib/EIP712Utils.js'
 import { expect } from 'chai'
 
 import StarflaskAPIHelper from '../lib/starflask-api-helper.js'
- 
+import MarketOrderHelper from '../lib/market-order-helper.js'
 
 let testAccount = {
   publicAddress: '0x95eDA452256C1190947f9ba1fD19422f0120858a',
@@ -56,7 +56,7 @@ describe("Web API test", function() {
       //mainnet deployed
       let contractAddress = "0x0419732028fa499200a0e36972e4c139e98d28e1"
 
-
+ 
     
       let dataValues = {
         
@@ -69,40 +69,40 @@ describe("Web API test", function() {
         nonce:"0x695d08147db544da227e479d03eca34317fb52727d6d61a6ce981ad0e66a8bf5",
         expires:50000 
     }
-
  
-    const typedData = EIP712Utils.getTypedDataFromParams( 
-      chainId,  
-      contractAddress,
-      customConfig,
-      dataValues  
-    ) 
- 
-    let typedDatahash = EIP712Utils.getTypedDataHash(typedData)        
+    
 
     var privateKey = testAccount.secretKey;   
 
-    var signature = EIP712Utils.signDataHash( typedDatahash, privateKey )
+   // var signature = EIP712Utils.signDataHash( typedDatahash, privateKey )
 
  
      let inputParameters = {
        chainId: chainId,
        storeContractAddress:contractAddress,
+       
        orderCreator:dataValues.orderCreator,
        nftContractAddress:dataValues.nftContractAddress,
        nftTokenId:dataValues.nftTokenId,
        currencyTokenAddress:dataValues.currencyTokenAddress,
        currencyTokenAmount:dataValues.currencyTokenAmount,
        nonce: dataValues.nonce,
-       expires:dataValues.expires,
-       signature: signature 
+       expires:dataValues.expires 
      }
 
-     console.log('inputParameters',inputParameters)
+     
+
+     inputParameters = MarketOrderHelper.createAndSignOrder(inputParameters, privateKey )
+ 
 
      let recoveredSigner = EIP712Utils.recoverOrderSigner(  inputParameters   )
     
-     console.log('recoveredSigner', recoveredSigner )
+     console.log('recoveredSigner', recoveredSigner ) 
+
+
+     /*
+      Need to boot an api-dev server (onsecondary-market ->  npm run api-dev )
+     */
 
       let apiURI = 'http://localhost:4000/api/v1/token'
       let inputData = {requestType: "save_new_order", input: inputParameters }
@@ -113,9 +113,5 @@ describe("Web API test", function() {
 
       expect(response).to.exist
   
-
-      //let result = await myEIP712Contract.methods.verifyOffchainSignatureAndDoStuff(...args).send({from:  primaryAccountAddress })
-
-      //console.log("result of method call: ", result)
     });
   });
