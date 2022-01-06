@@ -5,7 +5,7 @@
     "storeContractAddress": "0x0419732028fa499200a0e36972e4c139e98d28e1",
     "isSellOrder":false,
     "nftContractAddress": "0xf8b0a49dA21e6381f1cd3CF43445800abe852179" ,
-    "nftTokenIds": [0,1,2,3,4,5,6,7,8,9,10],
+    "nftTokenIds": [0,1,3557 ],
  
     "currencyTokenType": "WETH",
     "currencyTokenAmountFormatted": "0.02", 
