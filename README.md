@@ -14,3 +14,9 @@
 
 4. run 'npm run start' to start the bot 
 
+
+
+
+### Helpful Hints 
+
+The marketApiURI for production is 'https://api.onsecondary.com' 
