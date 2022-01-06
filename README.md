@@ -6,7 +6,7 @@
 - >> npm install 
 
 
-1. Be sure to approve your WETH and NFTs to the store contract address: 0x0419732028fa499200a0e36972e4c139e98d28e1
+1. Be sure to approve your WETH(if bidding [isSellOrder:false]) and NFTs(if listing [isSellOrder:true]) to the store contract address: 0x0419732028fa499200a0e36972e4c139e98d28e1
 
 2. Define secrets in 'config.json'  (see config.sample.json for format) [DO NOT ever share or commit this file]
 
