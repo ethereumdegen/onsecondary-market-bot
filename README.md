@@ -1,5 +1,9 @@
 #### On Secondary Market Bot 
 
+#### Pre-requisites
+- Nodejs 14 
+- >> clone this repo
+- >> npm install 
 
 
 1. Be sure to approve your WETH and NFTs to the store contract address: 0x0419732028fa499200a0e36972e4c139e98d28e1
