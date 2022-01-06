@@ -6,9 +6,8 @@ import ganache from 'ganache-cli'
 import  Web3 from 'web3' 
 
 import ethUtil from 'ethereumjs-util'
-
- 
 import EIP712Utils from '../lib/EIP712Utils.js'
+import { expect } from 'chai'
  
 
 let testAccount = {
@@ -35,7 +34,7 @@ let customConfigJSON = fs.readFileSync(path.join('./lib/eip712-config.json'));
 let customConfig = JSON.parse(customConfigJSON)
 
 //const { abi, evm } = require('../compile');
-let contractJSON = fs.readFileSync(path.join('./contracts/BlockStore.json'));
+let contractJSON = fs.readFileSync(path.join('./contracts/built/BlockStore.json'));
 let contractData = JSON.parse(contractJSON)
 
 let abi = contractData.abi
@@ -47,10 +46,14 @@ describe("EIP712 Contract Testing", function() {
       ///let accounts = await web3.eth.getAccounts()
       let chainId = await web3.eth.net.getId()
 
+      console.log('chainId',chainId)
+
       let primaryAccountAddress = testAccount.publicAddress
 
+      console.log('primaryAccountAddress',primaryAccountAddress)
+
       let myEIP712Contract = await new web3.eth.Contract(abi)
-          .deploy({data: "0x" + evm.bytecode.object, arguments: [chainId]})
+          .deploy({data: "0x" + evm.bytecode.object, arguments: [ ]})
           .send({from:  primaryAccountAddress, gas: 5000000});
   
       let contractAddress = myEIP712Contract.options.address
@@ -62,13 +65,14 @@ describe("EIP712 Contract Testing", function() {
       MAKE SURE YOU CHANGE THIS VARIABLE IF YOU MODIFY eip712-config.json!!!
       */
       let dataValues = {
-        customName:"myName",
-        bidderAddress: primaryAccountAddress,
+        
+        orderCreator: primaryAccountAddress,
+        isSellOrder:false,
         nftContractAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        nftTokenId: 2,
         currencyTokenAddress:"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-        currencyTokenAmount:100,
-        requireProjectId:true,
-        projectId:123,
+        currencyTokenAmount:100, 
+        nonce:"0x695d08147db544da227e479d03eca34317fb52727d6d61a6ce981ad0e66a8bf5",
         expires:50000 
     }
 
@@ -100,21 +104,38 @@ describe("EIP712 Contract Testing", function() {
     */
 
 
-
-   
     var privateKey = testAccount.secretKey;
     var privKey = Buffer.from(privateKey.substring(2), 'hex')
  
-     
+      
 
-
-    const sig = ethUtil.ecsign( typedDatahash   , privKey );
+    console.log('lll', typedDatahash.length, privKey.length )
+    const sig =   ethUtil.ecsign( typedDatahash   , privKey );
  
-    var signature = ethUtil.toRpcSig(sig.v, sig.r, sig.s);
-    
+
+    var signature =   EIP712Utils.signDataHash( typedDatahash, privateKey )
 
 
-    let recoveredSigner = EIP712Utils.recoverPacketSigner(typedData, signature)
+
+     let inputParameters = {
+       chainId: chainId,
+       storeContractAddress:contractAddress,
+       orderCreator:dataValues.orderCreator,
+       nftContractAddress:dataValues.nftContractAddress,
+       nftTokenId:dataValues.nftTokenId,
+       currencyTokenAddress:dataValues.currencyTokenAddress,
+       currencyTokenAmount:dataValues.currencyTokenAmount,
+       nonce: dataValues.nonce,
+       expires:dataValues.expires,
+       signature: signature 
+     }
+
+     console.log('inputParameters',inputParameters)
+
+    let recoveredSigner = EIP712Utils.recoverOrderSigner(  inputParameters   )
+   
+    /* 
+    let recoveredSigner = EIP712Utils.recoverPacketSigner(typedData, signature)*/
     console.log('recoveredSigner', recoveredSigner )
       
 
@@ -123,8 +144,10 @@ describe("EIP712 Contract Testing", function() {
 
       console.log('args', args )
 
-      let result = await myEIP712Contract.methods.verifyOffchainSignatureAndDoStuff(...args).send({from:  primaryAccountAddress })
+      expect( recoveredSigner.toLowerCase()  ).to.eql(  dataValues.orderCreator.toLowerCase() )
 
-      console.log("result of method call: ", result)
+      //let result = await myEIP712Contract.methods.verifyOffchainSignatureAndDoStuff(...args).send({from:  primaryAccountAddress })
+
+      //console.log("result of method call: ", result)
     });
   });
