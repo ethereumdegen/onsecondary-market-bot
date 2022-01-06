@@ -1,4 +1,5 @@
 {
     "rpcProviderURL":"",
-    "accountPrivateKey":""
+    "accountPrivateKey":"",
+    "marketAPIURL":"localhost:4000"
 }
