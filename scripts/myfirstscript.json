@@ -9,6 +9,6 @@
     "currencyTokenAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "currencyTokenAmount": "100000000000000000", 
     "currencyTokenType": "WETH",
-    "currencyTokenAmountFormatteed": "0.02", 
+    "currencyTokenAmountFormatted": "0.02", 
     "expiresIn": 500   
 }

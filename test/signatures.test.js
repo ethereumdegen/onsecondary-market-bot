@@ -107,9 +107,7 @@ describe("EIP712 Contract Testing", function() {
     var privateKey = testAccount.secretKey;
     var privKey = Buffer.from(privateKey.substring(2), 'hex')
  
-      
-
-    console.log('lll', typedDatahash.length, privKey.length )
+       
     const sig =   ethUtil.ecsign( typedDatahash   , privKey );
  
 
