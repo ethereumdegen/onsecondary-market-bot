@@ -1,5 +1,6 @@
 {
     "rpcProviderURL":"",
     "accountPrivateKey":"",
-    "marketAPIURL":"localhost:4000"
+    "marketAPIURL":"localhost:4000",
+    "scripts":["myfirstscript.js"]
 }

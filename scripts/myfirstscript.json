@@ -1,0 +1,14 @@
+{
+    "program": "staticBid",
+    "intervalSeconds": 3000, 
+    "chainId":1,
+    "storeContractAddress": "0x0419732028fa499200a0e36972e4c139e98d28e1",
+    "isSellOrder":false,
+    "nftContractAddress": "0xf8b0a49dA21e6381f1cd3CF43445800abe852179" ,
+    "nftTokenIds": [0,1,2,3,4,5,6,7,8,9,10],
+    "currencyTokenAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "currencyTokenAmount": "100000000000000000", 
+    "currencyTokenType": "WETH",
+    "currencyTokenAmountFormatteed": "0.02", 
+    "expiresIn": 500   
+}
